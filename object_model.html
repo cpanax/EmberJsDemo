@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Learn Ember</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <script type="text/x-handlebars" data-template-name="index">
+    <h2>Welcome to Ember.js</h2>
+    <div id="debug"></div>
+  </script>
+
+  <script src="js/libs/jquery-1.9.1.js"></script>
+  <script src="js/libs/handlebars-1.0.0.js"></script>
+  <script src="js/libs/ember-1.0.0-rc.7.js"></script>
+
+  <script type="text/javascript">
+    window.App = Ember.Application.create();
+    
+    var globalCounter = 0;
+    //Object model representation for a OO Class
+    var Bookmark = Ember.Object.extend({
+      to_link: function(){
+        return ['<a href="', this.get('url'), '">', this.get('name'), '</a>'].join('');
+      },
+      //Computed Property -- only call via object.get()
+      link: function(){
+        return this.to_link();
+      }.property('name','url'),
+      //Observer
+      updateCounter: Ember.observer(function(){
+        globalCounter++;
+        console.log('Global counter has increased to ' + globalCounter);
+      }, 'name')
+    });
+
+    //Extend a Class
+    Bookmark.reopen({
+      formatted: function(){
+        return this.get('name') + ' ' + this.get('url');
+      }
+    });
+
+    //Instantiate a Bookmark Object
+    var bookmark = Bookmark.create({name: "Dropbox", url: "http://dropbox.com"});
+
+  </script>
+
+</body>
+</html>
